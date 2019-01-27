@@ -1,13 +1,17 @@
 // inspired by https://leanpub.com/redux-book
-import axios from "axios";
-import { API } from "../actions/types";
-import { accessDenied, apiError, apiStart, apiEnd } from "../actions/api";
+import axios from "axios"
+import { API } from "../actions/types"
+import { accessDenied, apiError, apiStart, apiEnd } from "../actions/api"
 
+// define a Redux middleware
 const apiMiddleware = ({ dispatch }) => next => action => {
-  next(action);
+  //
+  next(action)
 
-  if (action.type !== API) return;
+  // only handle API action.type
+  if (action.type !== API) return
 
+  // destruct properties from payload object
   const {
     url,
     method,
@@ -17,16 +21,19 @@ const apiMiddleware = ({ dispatch }) => next => action => {
     onFailure,
     label,
     headers
-  } = action.payload;
-  const dataOrParams = ["GET", "DELETE"].includes(method) ? "params" : "data";
+  } = action.payload
+
+  // attach 'params' property to GET and DELETE methods, otherwise, attach 'data'
+  const dataOrParams = ["GET", "DELETE"].includes(method) ? "params" : "data"
 
   // axios default configs
-  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "";
-  axios.defaults.headers.common["Content-Type"] = "application/json";
-  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || ""
+  axios.defaults.headers.common["Content-Type"] = "application/json"
+  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`
 
+  // loading state
   if (label) {
-    dispatch(apiStart(label));
+    dispatch(apiStart(label))
   }
 
   axios
@@ -37,21 +44,22 @@ const apiMiddleware = ({ dispatch }) => next => action => {
       [dataOrParams]: data
     })
     .then(({ data }) => {
-      dispatch(onSuccess(data));
+      dispatch(onSuccess(data))
     })
     .catch(error => {
-      dispatch(apiError(error));
-      dispatch(onFailure(error));
+      dispatch(apiError(error))
+      dispatch(onFailure(error))
 
+      // handle authentication error, record the location the user was on
       if (error.response && error.response.status === 403) {
-        dispatch(accessDenied(window.location.pathname));
+        dispatch(accessDenied(window.location.pathname))
       }
     })
     .finally(() => {
       if (label) {
-        dispatch(apiEnd(label));
+        dispatch(apiEnd(label))
       }
-    });
-};
+    })
+}
 
-export default apiMiddleware;
+export default apiMiddleware

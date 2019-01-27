@@ -1,22 +1,23 @@
-import { SET_ARTICLE_DETAILS, API, FETCH_ARTICLE_DETAILS } from "./types";
+import { SET_ARTICLE_DETAILS, API, FETCH_ARTICLE_DETAILS } from "./types"
 
-export function fetchArticleDetails() {
+export function fetchArticleDetails () {
   return apiAction({
     url: "https://api.myjson.com/bins/19dtxc",
     onSuccess: setArticleDetails,
     onFailure: console.log("Error occured loading articles"),
     label: FETCH_ARTICLE_DETAILS
-  });
+  })
 }
 
-function setArticleDetails(data) {
+function setArticleDetails (data) {
   return {
     type: SET_ARTICLE_DETAILS,
     payload: data
-  };
+  }
 }
 
-function apiAction({
+// helper function to create a API type action
+function apiAction ({
   url = "",
   method = "GET",
   data = null,
@@ -38,5 +39,5 @@ function apiAction({
       label,
       headersOverride
     }
-  };
+  }
 }

@@ -1,38 +1,29 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import Article from "../components/Article";
-import Clap from "../components/Clap";
-import { fetchArticleDetails } from "../actions";
+import React, { Component } from "react"
+import { connect } from "react-redux"
+import Article from "../components/Article"
+import Clap from "../components/Clap"
+import { fetchArticleDetails } from "../actions"
 
-const StyledApp = styled.div`
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-
-  aside {
-    min-width: 35vh;
-    display: flex;
-    justify-content: flex-end;
-  }
-  main {
-    flex: 1 0 350px;
-    ${"" /* not responsive */} padding: 0 5rem;
-  }
-`;
+import { StyledApp } from './appStyle'
 
 class App extends Component {
-  state = {};
-  componentDidMount() {
-    this.props.fetchArticleDetails();
+  componentDidMount () {
+    this.props.fetchArticleDetails()
   }
-  render() {
-    const { title, subtitle, paragraphs } = this.props.data;
-    const countTotal = this.props.data.numberOfRecommends;
+
+  render () {
+    const { data } = this.props
+    const {
+      paragraphs,
+      subtitle,
+      title,
+    } = data
+    const countTotal = data.numberOfRecommends
+
     return (
       <StyledApp>
         <aside>
-          <Clap countTotal={countTotal} />
+          <Clap countTotal={countTotal}/>
         </aside>
         <main>
           {this.props.isLoadingData ? (
@@ -46,17 +37,17 @@ class App extends Component {
           )}
         </main>
       </StyledApp>
-    );
+    )
   }
 }
 
 const mapStateToProps = ({ data = {}, isLoadingData = false }) => ({
   data,
   isLoadingData
-});
-export default connect(
-  mapStateToProps,
-  {
-    fetchArticleDetails
-  }
-)(App);
+})
+
+const mapDispatchToProps = {
+  fetchArticleDetails
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

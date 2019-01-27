@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from "react"
+import styled from "styled-components"
 
 const StyledArticle = styled.div`
   h1 {
@@ -19,7 +19,7 @@ const StyledArticle = styled.div`
     font-size: 18px;
     color: #4a4a4a;
   }
-`;
+`
 
 const Article = ({ title = "", subtitle = "", paragraphs = [] }) => {
   return (
@@ -30,7 +30,7 @@ const Article = ({ title = "", subtitle = "", paragraphs = [] }) => {
         <p key={paragraph.text}>{paragraph.text}</p>
       ))}
     </StyledArticle>
-  );
-};
+  )
+}
 
-export default Article;
+export default Article
